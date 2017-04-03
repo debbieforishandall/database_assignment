@@ -14,10 +14,12 @@ $people = [];
 
 <h2>Matches For <?=$name?> </h2>
 <?php
+$count = 0;
 //connect to database 
 $db = db_connect();
 //sql statement to find users
-$sql = "SELECT u.name, u.gender, u.age FROM users_info u
+$sql = "SELECT u.name, u.gender, u.age, p.personality, f.os,
+	s.min_age, s.max_age FROM user_info u
 	JOIN personality p ON p.id = u.id
 	JOIN favOS f ON f.id = u.id
 	JOIN seeking_age s ON s.id = u.id";
@@ -25,13 +27,28 @@ $sql = "SELECT u.name, u.gender, u.age FROM users_info u
 $name = $db->quote($name);
 $find_user = $sql . " WHERE u.name = $name";
 //execute find user query
-$users = $db->query($find_user);
+try{
+	$sth = $db->prepare($find_user);
+	$sth->execute();
+	$users = $sth->fetchAll();
+}catch (PDOException $ex){
+	echo $ex->getMessage() . " <br>" ;
+}
 $user = $users['0']; //Assuming no  duplicates
-
+//var_dump($users);
+//echo $user['name'] . " " . $user['min_age'] . " " . $user['max_age'];
 //Find matches sql
 $min_age = $db->quote($user['min_age']);
 $max_age = $db->quote($user['max_age']);
 $find_matches = $sql . " WHERE u.name <> $name AND u.age >= $min_age AND u.age <= $max_age";
+try{
+	$smt = $db->prepare($find_matches);
+	$smt->execute();
+	$rows = $smt->fetchAll();
+}catch (PDOException $ex){
+	echo $ex->getMessage() . " <br>" ;
+}
+
 /*while(!feof($myfile)){
     $person = explode(",", fgets($myfile));
     if(trim($person['0']) === trim($name)){
@@ -42,12 +59,9 @@ fclose($myfile);
 */
 //open file
 //$myfile = fopen("singles.txt", "r") or die("Unable to open file!");
-$count = 0;
-//execute sql query
-$rows = $db->query($fnd_matches);
-//Read file one by one
+
 foreach($rows as $people){
- if( (trim($people['name']) !== trim($name)) && is_match($user, $people)){
+ if(is_match($user, $people)){
  $count++;
 ?>
 <div class="match">
