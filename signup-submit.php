@@ -91,17 +91,27 @@ if(is_post_request()){
     if(empty($errors)){
         $person = array($name, $gender, $age, $personality_type, $favOS, $min_age, $max_age);
 	$db = db_connect();
-	$info_sql = "INSERT INTO user_info (name, gender, age) VALUES ($db->quote($name), $db->quote($gender), $db->quote($age));";
-	$personality_sql = "INSERT INTO personality (personality) VALUES ($db->quote($personality_type));";
-	$seeking_age_sql = "INSERT INTO seeking_age (min_age, max_age) VALUES ($db->quote($min_age), $db->quote($max_age));";
-	$favOS_sql = "INSERT INTO favOS (os) VALUES ($db->quote($favOS));" ;
+	//Escape variables before inserting
+	$name = $db->quote($name);
+	$gender = $db->quote($gender);
+	$age = $db->quote($age);
+	$personality_type = $db->quote($personality_type);
+	$favOS = $db->quote($favOS);
+	$min_age = $db->quote($max_age);
+	$info_sql = "INSERT INTO user_info (name, gender, age) VALUES ($name, $gender, $age)";
+	$personality_sql = "INSERT INTO personality (personality) VALUES ($personality_type)";
+	$seeking_age_sql = "INSERT INTO seeking_age (min_age, max_age) VALUES ($min_age, $max_age)";
+	$favOS_sql = "INSERT INTO favOS (os) VALUES ($favOS)" ;
 	try{
-		$result1 = $db->query($info_sql);
-		$result2 = $db->query($personality_sql);
-		$result3 = $db->query($seeking_age_sql);
-		$result4 = $db->query($favOS_sql);
+		$db->exec($info_sql);
+		$db->exec($personality_sql);
+		$db->exec($seeking_age_sql);
+		$db->exec($favOS_sql);
 	}
-	catch (PDOException $ex){}
+	catch (PDOException $ex){
+		echo $ex->getMessage(). "<br>";
+	}
+	$db = null;
         //$current = "\n";
         //$current .= implode(",", $person);
         //open file for writing
