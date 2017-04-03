@@ -88,15 +88,15 @@ function OS_match($OS1, $OS2){
 
 function is_match($user, $person){
 //Check if person is a match with the user
-    $user_gender = $user['1'];
-    $person_gender = $person['1'];
-    $person_age = $person['2'];
-    $min_age = $user['5'];
-    $max_age = $user['6'];
-    $user_type = $user['3'];
-    $person_type = $person['3'];
-    $user_os = $user['4'];
-    $person_os = $person['4'];
+    $user_gender = $user['gender'];
+    $person_gender = $person['gender'];
+    $person_age = $person['age'];
+    $min_age = $user['min_age'];
+    $max_age = $user['max_age'];
+    $user_type = $user['personality'];
+    $person_type = $person['personality' ];
+    $user_os = $user['os'];
+    $person_os = $person['os'];
     return ( within_age($person_age, $min_age, $max_age) && gender_match($user_gender, $person_gender) && type_match($user_type, $person_type) && OS_match($user_os, $person_os) );
 
 }
