@@ -24,6 +24,14 @@ $sql = "SELECT u.name, u.gender, u.age FROM users_info u
 //Find actual user
 $name = $db->quote($name);
 $find_user = $sql . " WHERE u.name = $name";
+//execute find user query
+$users = $db->query($find_user);
+$user = $users['0']; //Assuming no  duplicates
+
+//Find matches sql
+$min_age = $db->quote($user['min_age']);
+$max_age = $db->quote($user['max_age']);
+$find_matches = $sql . " WHERE u.name <> $name AND u.age >= $min_age AND u.age <= $max_age";
 /*while(!feof($myfile)){
     $person = explode(",", fgets($myfile));
     if(trim($person['0']) === trim($name)){
@@ -36,7 +44,7 @@ fclose($myfile);
 //$myfile = fopen("singles.txt", "r") or die("Unable to open file!");
 $count = 0;
 //execute sql query
-$rows = $db->query($sql);
+$rows = $db->query($fnd_matches);
 //Read file one by one
 foreach($rows as $people){
  if( (trim($people['name']) !== trim($name)) && is_match($user, $people)){
