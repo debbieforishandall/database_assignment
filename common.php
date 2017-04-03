@@ -105,7 +105,7 @@ function is_match($user, $person){
 
 //connect to database
 function db_connect(){
-	$db = new PDO("mysql:dbname=nerdluv;host=localhost" , "root" );
+	$db = new PDO("mysql:dbname=nerdlove_db;host=localhost" , "nerdlove_root", "password" );
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	return $db;
 }
