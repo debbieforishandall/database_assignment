@@ -55,10 +55,10 @@ function is_type($type, $type_array){
 }
 function gender_match($gender1, $gender2){
 //check if two genders are opposite
-    if(trim($gender1) === 'F'){
-        return trim($gender2) === 'M';
+    if( (trim($gender1) === 'F') || (trim($gender1) === 'f') ){
+        return (trim($gender2) === 'M') || (trim($gender2) === 'm') ;
     } else {
-        return trim($gender2) === 'F';
+        return (trim($gender2) === 'F') || (trim($gender2) === 'f') ;
     }
 }
 
@@ -97,7 +97,7 @@ function is_match($user, $person){
     $person_type = $person['personality' ];
     $user_os = $user['os'];
     $person_os = $person['os'];
-    return ( within_age($person_age, $min_age, $max_age) && gender_match($user_gender, $person_gender) && type_match($user_type, $person_type) && OS_match($user_os, $person_os) );
+    return (gender_match($user_gender, $person_gender) && type_match($user_type, $person_type) && OS_match($user_os, $person_os) );
 
 }
 

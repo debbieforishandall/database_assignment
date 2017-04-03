@@ -91,13 +91,15 @@ if(is_post_request()){
     if(empty($errors)){
         $person = array($name, $gender, $age, $personality_type, $favOS, $min_age, $max_age);
 	$db = db_connect();
+	$gender = strtoupper($gender);
+	$personality_type = strtoupper($personality_type);
 	//Escape variables before inserting
 	$name = $db->quote($name);
 	$gender = $db->quote($gender);
 	$age = $db->quote($age);
 	$personality_type = $db->quote($personality_type);
 	$favOS = $db->quote($favOS);
-	$min_age = $db->quote($max_age);
+	$min_age = $db->quote($min_age);
 	$info_sql = "INSERT INTO user_info (name, gender, age) VALUES ($name, $gender, $age)";
 	$personality_sql = "INSERT INTO personality (personality) VALUES ($personality_type)";
 	$seeking_age_sql = "INSERT INTO seeking_age (min_age, max_age) VALUES ($min_age, $max_age)";

@@ -14,6 +14,18 @@ $people = [];
 
 <h2>Matches For <?=$name?> </h2>
 <?php
+
+/*while(!feof($myfile)){
+    $person = explode(",", fgets($myfile));
+    if(trim($person['0']) === trim($name)){
+      $user = $person;
+    }
+}
+fclose($myfile);
+*/
+//open file
+//$myfile = fopen("singles.txt", "r") or die("Unable to open file!");
+
 $count = 0;
 //connect to database 
 $db = db_connect();
@@ -45,24 +57,11 @@ try{
 	$smt = $db->prepare($find_matches);
 	$smt->execute();
 	$rows = $smt->fetchAll();
-}catch (PDOException $ex){
-	echo $ex->getMessage() . " <br>" ;
-}
+	//var_dump($rows);
 
-/*while(!feof($myfile)){
-    $person = explode(",", fgets($myfile));
-    if(trim($person['0']) === trim($name)){
-      $user = $person;
-    }
-}
-fclose($myfile);
-*/
-//open file
-//$myfile = fopen("singles.txt", "r") or die("Unable to open file!");
-
-foreach($rows as $people){
- if(is_match($user, $people)){
- $count++;
+	foreach($rows as $people){
+	 if(is_match($user, $people)){
+	 $count++;
 ?>
 <div class="match">
     <p><img src="user.jpg" alt="default user image"/>
@@ -74,7 +73,12 @@ foreach($rows as $people){
     <li><strong>OS:</strong> <?=$people['os']?></li>
     </ul>
 </div>
-<?php }}
+<?php 
+	 }
+	}
+	}catch (PDOException $ex){
+		echo $ex->getMessage() . " <br>" ;
+	}
 //fclose($myfile);
 if($count === 0){ ?>
     <p>No match is found</p>
